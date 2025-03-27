@@ -29,6 +29,19 @@ struct Weather: Codable {
     let icon: String
 }
 
+struct ForecastData: Codable {
+    let list: [Forecast]
+}
+
+// Model for each 3-hour forecast entry
+struct Forecast: Codable {
+    let dt_txt: String // Date and time as a string
+    let main: Main
+    let weather: [Weather]
+}
+
+
+
 class WeatherService {
     let apiKey = "9f2ab64953e36216df4e532d138ec33d"
     
@@ -45,6 +58,37 @@ class WeatherService {
                     let weatherResponse = try JSONDecoder().decode(WeatherData.self, from: data)
                     DispatchQueue.main.async {
                         completion(weatherResponse)
+                    }
+                } catch {
+                    print("Decoding error: \(error)")
+                    DispatchQueue.main.async {
+                        completion(nil)
+                    }
+                }
+            } else {
+                DispatchQueue.main.async {
+                    completion(nil)
+                }
+            }
+        }.resume()
+    }
+}
+
+extension WeatherService {
+    func fetchForecast(for city: String, completion: @escaping ([Forecast]?) -> Void) {
+        let urlString = "https://api.openweathermap.org/data/2.5/forecast?q=\(city)&appid=\(apiKey)&units=imperial"
+        
+        guard let url = URL(string: urlString) else {
+            completion(nil)
+            return
+        }
+        
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            if let data = data {
+                do {
+                    let forecastResponse = try JSONDecoder().decode(ForecastData.self, from: data)
+                    DispatchQueue.main.async {
+                        completion(forecastResponse.list) // Return only the forecast list
                     }
                 } catch {
                     print("Decoding error: \(error)")
