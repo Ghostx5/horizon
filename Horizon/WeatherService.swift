@@ -13,6 +13,7 @@
 //
 
 import Foundation
+import MapKit
 
 struct WeatherData: Codable {
     let name: String
@@ -102,5 +103,15 @@ extension WeatherService {
                 }
             }
         }.resume()
+    }
+}
+
+extension WeatherService {
+    // Function to return OpenWeatherMap tile overlay
+    func getWeatherMapOverlay(layerType: String) -> MKTileOverlay {
+        let template = "https://tile.openweathermap.org/map/\(layerType)/{z}/{x}/{y}.png?appid=\(apiKey)"
+        let overlay = MKTileOverlay(urlTemplate: template)
+        overlay.canReplaceMapContent = false
+        return overlay
     }
 }

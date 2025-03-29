@@ -8,9 +8,11 @@
 import UIKit
 import CoreLocation
 import Toast
+import MapKit
 
-class ViewController: UIViewController, UITextFieldDelegate, CLLocationManagerDelegate {
+class ViewController: UIViewController, UITextFieldDelegate, CLLocationManagerDelegate, MKMapViewDelegate {
     
+    @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var cityLabel: UILabel!
     @IBOutlet weak var temperatureLabel: UILabel!
     @IBOutlet weak var weatherIconImageView: UIImageView!
@@ -25,10 +27,23 @@ class ViewController: UIViewController, UITextFieldDelegate, CLLocationManagerDe
         cityTextField.delegate = self
         let tapGesture = UITapGestureRecognizer(target:self, action: #selector(dismissKeyboard))
         locationManager.delegate = self
+        mapView.delegate = self
         locationManager.requestWhenInUseAuthorization()
         locationManager.requestLocation()
+        locationManager.startUpdatingLocation()
+        mapView.showsUserLocation = true
+        let coordinate = CLLocationCoordinate2D(latitude: 40.7128, longitude: -74.0060)
+        // Defaults to new york
+        let region = MKCoordinateRegion(center: coordinate, span: MKCoordinateSpan(latitudeDelta: 5, longitudeDelta: 5))
+        mapView.setRegion(region, animated: true)
+        addWeatherLayer(layerType: "temp_new")
         // Do any additional setup after loading the view.
     }
+    func addWeatherLayer(layerType: String) {
+        let overlay = weatherService.getWeatherMapOverlay(layerType: layerType)
+        mapView.addOverlay(overlay) // Add overlay to map
+    }
+    
     @objc func dismissKeyboard(){
         view.endEditing(true)
     }
@@ -42,6 +57,12 @@ class ViewController: UIViewController, UITextFieldDelegate, CLLocationManagerDe
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.first else { return }
         getCityName(from: location)
+        // Center map on user's location
+        let coordinate = location.coordinate
+        let region = MKCoordinateRegion(center: coordinate, span: MKCoordinateSpan(latitudeDelta: 5, longitudeDelta: 5))
+        mapView.setRegion(region, animated: true)
+        
+        locationManager.stopUpdatingLocation()
     }
     // CLLocationManager Delegate - Handle errors
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
@@ -118,6 +139,11 @@ class ViewController: UIViewController, UITextFieldDelegate, CLLocationManagerDe
         }
     }
     
+    @IBAction func changeLayer(_ sender: UISegmentedControl) {
+        let layers = ["temp_new", "clouds_new", "precipitation_new"]
+        mapView.removeOverlays(mapView.overlays)
+        addWeatherLayer(layerType: layers[sender.selectedSegmentIndex])
+    }
     // Convert "yyyy-MM-dd HH:mm:ss" to a short format like "Tue 3 PM"
     func formatDate(_ dateString: String) -> String {
         let formatter = DateFormatter()
@@ -145,4 +171,13 @@ class ViewController: UIViewController, UITextFieldDelegate, CLLocationManagerDe
         }
     }
     
+}
+
+extension ViewController {
+    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+        if let tileOverlay = overlay as? MKTileOverlay {
+            return MKTileOverlayRenderer(tileOverlay: tileOverlay)
+        }
+        return MKOverlayRenderer(overlay: overlay)
+    }
 }

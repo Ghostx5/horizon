@@ -303,6 +303,8 @@
 				INFOPLIST_FILE = Horizon/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Horizon;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.weather";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "\"We need your location to show weather information.\"";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "\"We need your location to show weather infomation.\"";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -333,6 +335,8 @@
 				INFOPLIST_FILE = Horizon/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Horizon;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.weather";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "\"We need your location to show weather information.\"";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "\"We need your location to show weather infomation.\"";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;

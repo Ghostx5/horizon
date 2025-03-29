@@ -3,6 +3,7 @@
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
+        <capability name="Map view configurations" minToolsVersion="14.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -58,9 +59,9 @@
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="forecast" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cka-ic-Efh">
-                                <rect key="frame" x="49" y="382" width="294" height="321"/>
+                                <rect key="frame" x="49" y="340" width="294" height="173"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="25"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -74,6 +75,23 @@
                                     <action selector="searchButtonTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="vQ5-YI-He9"/>
                                 </connections>
                             </button>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wXc-RS-tYW">
+                                <rect key="frame" x="41" y="521" width="311" height="160"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <standardMapConfiguration key="preferredConfiguration"/>
+                            </mapView>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="ZDj-gv-bKf">
+                                <rect key="frame" x="41" y="689" width="311" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <segments>
+                                    <segment title="Temperature"/>
+                                    <segment title="Clouds"/>
+                                    <segment title="Precipitation"/>
+                                </segments>
+                                <connections>
+                                    <action selector="changeLayer:" destination="BYZ-38-t0r" eventType="valueChanged" id="Ceb-kx-NLT"/>
+                                </connections>
+                            </segmentedControl>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -83,6 +101,7 @@
                         <outlet property="cityTextField" destination="4XK-df-K66" id="0BR-cM-cw3"/>
                         <outlet property="descriptionLabel" destination="Bbj-nW-sJh" id="c4m-c6-0Vc"/>
                         <outlet property="forecastLabel" destination="cka-ic-Efh" id="Epg-Dx-PXM"/>
+                        <outlet property="mapView" destination="wXc-RS-tYW" id="D3K-kN-BUm"/>
                         <outlet property="temperatureLabel" destination="eX3-6U-cdK" id="xc3-8Q-3QO"/>
                         <outlet property="weatherIconImageView" destination="WFE-aS-2Mt" id="ZWl-Td-o7v"/>
                     </connections>
